@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 
 export default class Search extends Component {
   state = {
-    text: ''
+    text: '',
   };
 
   static propTypes = {
-    SearchUsers: PropTypes.func.isRequired,
+    searchUsers: PropTypes.func.isRequired,
+    setAlert: PropTypes.func.isRequired,
+
     clearUsers: PropTypes.func.isRequired,
     showClear: PropTypes.bool.isRequired,
-    setAlert: PropTypes.func.isRequired
   };
 
-  onChange = e => this.setState({ text: e.target.value });
+  onChange = (e) => this.setState({ text: e.target.value });
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
-    // console.log(this.state.text);
 
     if (this.state.text === '') {
       this.props.setAlert('Please enter something', 'ligth');
@@ -28,6 +28,10 @@ export default class Search extends Component {
   };
 
   render() {
+    // Destructing clearUsers from props because its inside render ( sending him up to App Compoment)
+    // onClick={this.props.clearUsers} without destructing
+    const { showClear, clearUsers } = this.props;
+
     return (
       <div>
         <form onSubmit={this.onSubmit} className="form">
@@ -44,11 +48,8 @@ export default class Search extends Component {
             className="btn btn-dark btn-block"
           />
         </form>
-        {this.props.showClear && (
-          <button
-            className="btn btn-light btn-block"
-            onClick={this.props.clearUsers}
-          >
+        {showClear && (
+          <button className="btn btn-light btn-block" onClick={clearUsers}>
             Clear
           </button>
         )}
